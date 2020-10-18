@@ -60,6 +60,12 @@ impl<F: FnMut(&[u8])> OutputSink for F {
     }
 }
 
+impl<W: Write> OutputSink for W {
+    fn handle_chunk(&mut self, chunk: &[u8]) {
+        self.write_all(chunk).expect("failed to write to buffer");
+    }
+}
+
 pub struct Dispatcher<C, O>
 where
     C: TransformController,
